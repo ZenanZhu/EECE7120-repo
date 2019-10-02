@@ -1,3 +1,3 @@
-# EECE7120_repo
+# HOMEWORK2
 
-Homework2 is added into the folder: "EECE7120_repo_hw2"
+Homework for publisher and subscriber rosnode (python)
