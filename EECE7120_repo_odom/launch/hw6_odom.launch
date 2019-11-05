@@ -1,0 +1,7 @@
+<launch>
+
+    <param name="/odom_csv_file_name" value="$(find EECE7120_repo_odom)/wheel_ticks.csv" />
+    <node pkg="EECE7120_repo_odom" name="wheel_tick_pub" type="wheel_tick_pub.py"/>
+    <node pkg="EECE7120_repo_odom" name="odom_calc" type="odom_calc.py"/>
+
+</launch>
