@@ -11,3 +11,6 @@ Mini-project2 part1 is added into the folder: "mp2/mp2_part1"
 
 Update on 11/21/2019:<br/>
 Mini-project2 part2 is added into the folder: "mp2/mp2_part2"
+
+Update on 12/04/2019:<br/>
+Homework8 is added into the folder: "hw8"
