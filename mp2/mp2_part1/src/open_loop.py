@@ -13,25 +13,25 @@ if __name__ == '__main__':
         t = rospy.get_time()
         msg = Twist2DStamped()
         dt = t - t_start
-        if dt > 5 and dt < 8:
+        if dt > 5 and dt < 7:
             msg.v = .5
             msg.omega = -0.5
-        elif dt > 8.5 and dt < 9.5:
-            msg.v = 0.0
-            msg.omega = pi/3.5
-        elif dt > 10 and dt < 13:
-            msg.v = 0.5
-            msg.omega = -0.3
-        elif dt > 13.5 and dt < 14.5:
-            msg.v = 0.0
-            msg.omega = pi/3.5
-        elif dt > 15 and dt < 18:
-            msg.v = 0.5
-            msg.omega =-0.2
-        elif dt > 18.5 and dt < 19.5:
+        elif dt > 7.5 and dt < 8.5:
             msg.v = 0.0
             msg.omega = pi/2.5
-        elif dt > 20 and dt < 23:
+        elif dt > 9 and dt < 11:
+            msg.v = 0.5
+            msg.omega = -0.3
+        elif dt > 11.5 and dt < 12.5:
+            msg.v = 0.0
+            msg.omega = pi/2.5
+        elif dt > 13 and dt < 15:
+            msg.v = 0.5
+            msg.omega =-0.2
+        elif dt > 15.5 and dt < 16.5:
+            msg.v = 0.0
+            msg.omega = pi/2.5
+        elif dt > 17 and dt < 19:
             msg.v = 0.5
             msg.omega = -0.1
         pub.publish(msg)
