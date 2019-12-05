@@ -14,3 +14,6 @@ Mini-project2 part2 is added into the folder: "mp2/mp2_part2"
 
 Update on 12/04/2019:<br/>
 Homework8 is added into the folder: "hw8"
+
+Update on 12/04/2019:<br/>
+Modified mini-project2 part2 folder: changed parameters in the ROS node
