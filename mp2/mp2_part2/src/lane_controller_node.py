@@ -22,20 +22,18 @@ class lane_controller():
         self.pose_msg = LanePose()
 
         # Setup PID gains
-        self.k_P_phi = -3.0
-        self.k_P_d = -1.5
+        self.k_P_phi = -3.5
+        self.k_P_d = -2.5
 
-        self.k_I_d = 0.4
+        self.k_I_d = 0.5
         self.k_I_phi = 0.1
 
-        self.k_D_d = 0.8
+        self.k_D_d = 0.7
         self.k_D_phi = 0.4
 
         # Initialization
-        self.d_err = 0
-        self.phi_err = 0
-        self.d_integral = 0
-        self.phi_integral = 0
+        self.prev_d_err = 0
+        self.prev_phi_err = 0
         self.v_ref = 0.5
         self.v_max = 1
 
@@ -47,11 +45,9 @@ class lane_controller():
 
 
     def updatePose(self, pose_msg):
-        prev_d_err = self.d_err
-        prev_phi_err = self.phi_err
 
-        self.d_err = pose_msg.d - self.d_offset
-        self.phi_err = pose_msg.phi
+        d_err = pose_msg.d - self.d_offset
+        phi_err = pose_msg.phi
 
         car_control_msg = Twist2DStamped()
 
@@ -59,36 +55,38 @@ class lane_controller():
 
         if self.prev_time is not None:
             dt = t-self.prev_time
-            self.d_integral += self.d_err * dt
-            self.phi_integral += self.phi_err * dt
+            d_integral = d_err * dt
+            phi_integral = phi_err * dt
 
-            if self.d_integral > self.d_integral_top_cutoff:
-                self.d_integral = self.d_integral_top_cutoff
-            if self.d_integral < self.d_integral_bottom_cutoff:
-                self.d_integral = self.d_integral_bottom_cutoff
+            if d_integral > self.d_integral_top_cutoff:
+                d_integral = self.d_integral_top_cutoff
+            if d_integral < self.d_integral_bottom_cutoff:
+                d_integral = self.d_integral_bottom_cutoff
 
-            if self.phi_integral > self.phi_integral_top_cutoff:
-                self.phi_integral = self.phi_integral_top_cutoff
-            if self.phi_integral < self.phi_integral_bottom_cutoff:
-                self.phi_integral = self.phi_integral_bottom_cutoff
+            if phi_integral > self.phi_integral_top_cutoff:
+                phi_integral = self.phi_integral_top_cutoff
+            if phi_integral < self.phi_integral_bottom_cutoff:
+                phi_integral = self.phi_integral_bottom_cutoff
 
             # To not keep correcting intergral
-            if abs(self.d_err) <= 0.02:
-                self.d_integral = 0
-            if abs(self.phi_err) <= 0.25:
-                self.phi_integral = 0
-            if np.sign(self.d_err) != np.sign(prev_d_err):  # sign of error changed => error passed zero
-                self.d_integral = 0
-            if np.sign(self.phi_err) != np.sign(prev_phi_err):  # sign of error changed => error passed zero
-                self.phi_integral = 0
+            if abs(d_err) <= 0.02:
+                d_integral = 0
+            if abs(phi_err) <= 0.25:
+                phi_integral = 0
+            if np.sign(d_err) != np.sign(self.prev_d_err):  # sign of error changed => error passed zero
+                d_integral = 0
+            if np.sign(phi_err) != np.sign(self.prev_phi_err):  # sign of error changed => error passed zero
+                phi_integral = 0
 
-
-            omega = self.k_P_d * self.d_err + self.k_P_phi * self.phi_err
-            omega += self.d_integral + self.phi_integral
-            omega += self.k_D_d * (self.d_err - prev_d_err)/dt + self.k_D_phi * (self.phi_err - prev_phi_err)/dt
+            omega = self.k_P_d * d_err + self.k_P_phi * phi_err
+            omega += d_integral + phi_integral
+            omega += self.k_D_d * (d_err - self.prev_d_err)/dt + self.k_D_phi * (phi_err - self.prev_phi_err)/dt
             omega = max(min(omega,5),-5)
             car_control_msg.v = 0.2
             car_control_msg.omega = omega
+
+            self.prev_d_err = d_err
+            self.prev_phi_err = phi_err
 
         self.prev_time = t
 
