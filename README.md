@@ -17,3 +17,6 @@ Homework8 is added into the folder: "hw8"
 
 Update on 12/04/2019:<br/>
 Modified mini-project2 part2 folder: changed parameters in the ROS node
+
+Update on 12/1/2019:<br/>
+Mini-project3 is added into the folder: "mp3"
